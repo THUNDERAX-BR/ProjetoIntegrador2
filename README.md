@@ -1,6 +1,6 @@
 Biblioteca Kumori
 
-Status: em desenvolvimento (Projeto base finalizado)
+Status: em desenvolvimento (Projeto base finalizado e refatorado)
 
 Tecnologias: Java e MySQL (Conector JDBC)
 
