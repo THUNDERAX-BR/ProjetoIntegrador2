@@ -8,8 +8,8 @@ import javax.swing.JOptionPane;
 import projetointegrador.dao.Conector;
 import projetointegrador.dao.ExemplaresDAO;
 import projetointegrador.objects.Exemplares;
-import projetointegrador.telas.CadastroExemplar;
-import projetointegrador.telas.InfoLivro;
+import projetointegrador.telas.TelaCadastroExemplar;
+import projetointegrador.telas.TelaInfoLivro;
 import projetointegrador.telas.TelaPrincipal;
 import tools.GlobalListener;
 
@@ -108,11 +108,11 @@ public class PnExemplarGerenciar extends javax.swing.JPanel {
 
     private void BtLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLivroActionPerformed
         ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
-        TelaPrincipal.sobreporPainel(new InfoLivro(exemplaresDao.getIdLivro(id)));
+        TelaPrincipal.sobreporPainel(new TelaInfoLivro(exemplaresDao.getIdLivro(id)));
     }//GEN-LAST:event_BtLivroActionPerformed
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
-        TelaPrincipal.sobreporPainel(new CadastroExemplar(listener, id));
+        TelaPrincipal.sobreporPainel(new TelaCadastroExemplar(listener, id));
     }//GEN-LAST:event_BtEditarActionPerformed
 
     private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed

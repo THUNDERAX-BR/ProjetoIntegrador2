@@ -27,7 +27,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         initComponents();
         validarPermissao();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        trocarPainel(new BuscarLivros());
+        trocarPainel(new TelaBuscarLivros());
         trocarBotao(BtLivro);
     }
     private static Logins login;
@@ -193,12 +193,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtAutorActionPerformed
-        trocarPainel(new BuscarAutores());
+        trocarPainel(new TelaBuscarAutores());
         trocarBotao(BtAutor);
     }//GEN-LAST:event_BtAutorActionPerformed
 
     private void BtGerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtGerenciarActionPerformed
-        trocarPainel(new Gerenciar());
+        trocarPainel(new TelaGerenciar());
         trocarBotao(BtGerenciar);
     }//GEN-LAST:event_BtGerenciarActionPerformed
 
@@ -209,7 +209,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_BtSairActionPerformed
 
     private void BtLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLivroActionPerformed
-        trocarPainel(new BuscarLivros());
+        trocarPainel(new TelaBuscarLivros());
         trocarBotao(BtLivro);
     }//GEN-LAST:event_BtLivroActionPerformed
 

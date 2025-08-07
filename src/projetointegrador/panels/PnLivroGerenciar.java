@@ -8,8 +8,8 @@ import javax.swing.JOptionPane;
 import projetointegrador.dao.Conector;
 import projetointegrador.dao.LivrosDAO;
 import projetointegrador.objects.Livros;
-import projetointegrador.telas.CadastroLivro;
-import projetointegrador.telas.InfoLivro;
+import projetointegrador.telas.TelaCadastroLivro;
+import projetointegrador.telas.TelaInfoLivro;
 import projetointegrador.telas.TelaPrincipal;
 import tools.GlobalListener;
 
@@ -107,11 +107,11 @@ public class PnLivroGerenciar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLivroActionPerformed
-        TelaPrincipal.sobreporPainel(new InfoLivro(id));
+        TelaPrincipal.sobreporPainel(new TelaInfoLivro(id));
     }//GEN-LAST:event_BtLivroActionPerformed
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
-        TelaPrincipal.sobreporPainel(new CadastroLivro(listener, id));
+        TelaPrincipal.sobreporPainel(new TelaCadastroLivro(listener, id));
     }//GEN-LAST:event_BtEditarActionPerformed
 
     private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed

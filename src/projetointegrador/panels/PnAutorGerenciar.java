@@ -8,8 +8,8 @@ import javax.swing.JOptionPane;
 import projetointegrador.dao.AutoresDAO;
 import projetointegrador.dao.Conector;
 import projetointegrador.objects.Autores;
-import projetointegrador.telas.CadastroAutor;
-import projetointegrador.telas.InfoAutor;
+import projetointegrador.telas.TelaCadastroAutor;
+import projetointegrador.telas.TelaInfoAutor;
 import projetointegrador.telas.TelaPrincipal;
 import tools.GlobalListener;
 
@@ -101,11 +101,11 @@ public class PnAutorGerenciar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtAutorActionPerformed
-        TelaPrincipal.sobreporPainel(new InfoAutor(id));
+        TelaPrincipal.sobreporPainel(new TelaInfoAutor(id));
     }//GEN-LAST:event_BtAutorActionPerformed
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
-        TelaPrincipal.sobreporPainel(new CadastroAutor(listener, id));
+        TelaPrincipal.sobreporPainel(new TelaCadastroAutor(listener, id));
     }//GEN-LAST:event_BtEditarActionPerformed
 
     private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed

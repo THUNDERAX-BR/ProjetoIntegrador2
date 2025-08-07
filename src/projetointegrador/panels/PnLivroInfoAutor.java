@@ -5,7 +5,7 @@
 package projetointegrador.panels;
 
 import projetointegrador.objects.Livros;
-import projetointegrador.telas.InfoLivro;
+import projetointegrador.telas.TelaInfoLivro;
 import projetointegrador.telas.TelaPrincipal;
 
 /**
@@ -67,7 +67,7 @@ public class PnLivroInfoAutor extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLivroActionPerformed
-        TelaPrincipal.sobreporPainel(new InfoLivro(id));
+        TelaPrincipal.sobreporPainel(new TelaInfoLivro(id));
     }//GEN-LAST:event_BtLivroActionPerformed
 
 

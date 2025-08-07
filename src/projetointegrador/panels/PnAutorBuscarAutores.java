@@ -5,7 +5,7 @@
 package projetointegrador.panels;
 
 import projetointegrador.objects.Autores;
-import projetointegrador.telas.InfoAutor;
+import projetointegrador.telas.TelaInfoAutor;
 import projetointegrador.telas.TelaPrincipal;
 
 /**
@@ -66,7 +66,7 @@ public class PnAutorBuscarAutores extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtAutorActionPerformed
-        TelaPrincipal.sobreporPainel(new InfoAutor(id));
+        TelaPrincipal.sobreporPainel(new TelaInfoAutor(id));
     }//GEN-LAST:event_BtAutorActionPerformed
 
 

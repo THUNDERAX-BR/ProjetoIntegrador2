@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import projetointegrador.dao.CategoriasDAO;
 import projetointegrador.dao.Conector;
 import projetointegrador.objects.Categorias;
-import projetointegrador.telas.CadastroSimples;
+import projetointegrador.telas.TelaCadastroSimples;
 import projetointegrador.telas.TelaPrincipal;
 import tools.GlobalListener;
 
@@ -81,7 +81,7 @@ public class PnCategoriaGerenciar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
-        TelaPrincipal.sobreporPainel(new CadastroSimples(listener, id, 'c'));
+        TelaPrincipal.sobreporPainel(new TelaCadastroSimples(listener, id, 'c'));
     }//GEN-LAST:event_BtEditarActionPerformed
 
     private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed

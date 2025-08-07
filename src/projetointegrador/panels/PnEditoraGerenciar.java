@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import projetointegrador.dao.Conector;
 import projetointegrador.dao.EditorasDAO;
 import projetointegrador.objects.Editoras;
-import projetointegrador.telas.CadastroSimples;
+import projetointegrador.telas.TelaCadastroSimples;
 import projetointegrador.telas.TelaPrincipal;
 import tools.GlobalListener;
 
@@ -80,7 +80,7 @@ public class PnEditoraGerenciar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
-        TelaPrincipal.sobreporPainel(new CadastroSimples(listener, id, 'e'));
+        TelaPrincipal.sobreporPainel(new TelaCadastroSimples(listener, id, 'e'));
     }//GEN-LAST:event_BtEditarActionPerformed
 
     private void BtExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtExcluirActionPerformed
