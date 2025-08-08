@@ -161,9 +161,7 @@ public class LivrosDAO {
                 if (resultSet.getBinaryStream("capa") != null) {
                     input = resultSet.getBinaryStream("capa");
                     imagem = ImageIO.read(input);
-                    Image ajuste = imagem.getScaledInstance(225, 300, Image.SCALE_SMOOTH);
-                    capa = new ImageIcon(ajuste);
-                    livro.setCapa(capa);
+                    livro.setCapa(imagem);
                 }
 
                 return livro;

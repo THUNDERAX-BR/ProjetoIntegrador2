@@ -1,6 +1,6 @@
 package projetointegrador.objects;
 
-import javax.swing.ImageIcon;
+import java.awt.Image;
 
 public class Autores {
 
@@ -10,7 +10,7 @@ public class Autores {
     private String dataFalecimento;
     private Movimentos movimento;
     private String biografia;
-    private ImageIcon foto;
+    private Image foto;
 
     public Autores() {
     }
@@ -21,7 +21,7 @@ public class Autores {
         this.movimento = movimento;
     }
 
-    public Autores(int id, String nome, String dataNascimento, String dataFalecimento, Movimentos movimento, String biografia, ImageIcon foto) {
+    public Autores(int id, String nome, String dataNascimento, String dataFalecimento, Movimentos movimento, String biografia, Image foto) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -79,11 +79,11 @@ public class Autores {
         this.id = id;
     }
 
-    public ImageIcon getFoto() {
+    public Image getFoto() {
         return foto;
     }
 
-    public void setFoto(ImageIcon foto) {
+    public void setFoto(Image foto) {
         this.foto = foto;
     }
 }

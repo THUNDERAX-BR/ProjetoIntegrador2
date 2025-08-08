@@ -5,9 +5,11 @@
 package projetointegrador.telas;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import projetointegrador.dao.AutoresDAO;
@@ -143,7 +145,9 @@ public class TelaInfoAutor extends javax.swing.JPanel {
             AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
             Autores autor = autoresDao.exibirAutor(id);
             if (autor.getFoto() != null) {
-                LbFoto.setIcon(autor.getFoto());
+                Image imagemAjustada = autor.getFoto().getScaledInstance(225, 225, Image.SCALE_SMOOTH);
+                ImageIcon icone = new ImageIcon(imagemAjustada);
+                LbFoto.setIcon(icone);
             }
             LbNome.setText(autor.getNome());
             LbId.setText("ID: " + id);
@@ -153,13 +157,13 @@ public class TelaInfoAutor extends javax.swing.JPanel {
                 LbNasc.setText(LbNasc.getText() + " - " + autor.getDataFalecimento());
             }
             TxBiografia.setText(autor.getBiografia());
-            
+
             LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
             List<Livros> lista = livrosDao.exbirLivrosAutor(id);
             if (lista != null) {
                 PnAux.removeAll();
                 PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-                
+
                 PnAux.add(Box.createVerticalStrut(30));
                 for (int i = 0; i < lista.size(); i++) {
                     PnLivroInfoAutor painel = new PnLivroInfoAutor(lista.get(i));
@@ -169,7 +173,7 @@ public class TelaInfoAutor extends javax.swing.JPanel {
                         PnAux.add(Box.createVerticalStrut(40));
                     }
                 }
-                
+
                 PnAux.revalidate();
                 PnAux.repaint();
             }

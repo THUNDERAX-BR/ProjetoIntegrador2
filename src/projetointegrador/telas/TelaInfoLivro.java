@@ -1,9 +1,11 @@
 package projetointegrador.telas;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import projetointegrador.dao.CategoriasDAO;
@@ -176,7 +178,9 @@ public class TelaInfoLivro extends javax.swing.JPanel {
             Livros livro = livrosDao.exibirLivro(id);
             this.livro = livro;
             if (livro.getCapa() != null) {
-                LbCapa.setIcon(livro.getCapa());
+                Image imagemAjustada = livro.getCapa().getScaledInstance(225, 300, Image.SCALE_SMOOTH);
+                ImageIcon icone = new ImageIcon(imagemAjustada);
+                LbCapa.setIcon(icone);
             }
             TxSinopse.setText(livro.getDescricao());
             LbId.setText("ID: " + String.valueOf(livro.getId()));

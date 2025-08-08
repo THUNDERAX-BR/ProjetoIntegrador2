@@ -1,7 +1,7 @@
 package projetointegrador.objects;
 
+import java.awt.Image;
 import java.util.List;
-import javax.swing.ImageIcon;
 
 public class Livros {
 
@@ -12,7 +12,7 @@ public class Livros {
     private String descricao;
     private List<Categorias> categorias;
     private Editoras editora;
-    private ImageIcon capa;
+    private Image capa;
 
     public Livros() {
     }
@@ -96,11 +96,11 @@ public class Livros {
         this.editora = editora;
     }
 
-    public ImageIcon getCapa() {
+    public Image getCapa() {
         return capa;
     }
 
-    public void setCapa(ImageIcon capa) {
+    public void setCapa(Image capa) {
         this.capa = capa;
     }
 }

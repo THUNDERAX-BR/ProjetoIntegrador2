@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import projetointegrador.objects.Autores;
 import projetointegrador.objects.Movimentos;
 
@@ -103,7 +102,6 @@ public class AutoresDAO {
         Movimentos movimento = new Movimentos();
         InputStream input;
         BufferedImage imagem;
-        ImageIcon foto;
         Date dataSql;
         LocalDate data;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");;
@@ -132,9 +130,7 @@ public class AutoresDAO {
                 if (resultSet.getBinaryStream("foto") != null) {
                     input = resultSet.getBinaryStream("foto");
                     imagem = ImageIO.read(input);
-                    Image ajuste = imagem.getScaledInstance(225, 225, Image.SCALE_SMOOTH);
-                    foto = new ImageIcon(ajuste);
-                    autor.setFoto(foto);
+                    autor.setFoto(imagem);
                 }
 
                 return autor;
