@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Autores;
 import projetointegrador.objects.Categorias;
 import projetointegrador.objects.Editoras;
@@ -30,7 +29,7 @@ public class LivrosDAO {
         this.connection = connection;
     }
 
-    public List<Livros> listarBuscarLivros(String busca, String anoInicial, String anoFinal, String categoria) {
+    public List<Livros> listarBuscarLivros(String busca, String anoInicial, String anoFinal, String categoria) throws Exception {
         try {
             String statement = "SELECT l.id, l.titulo, a.nome AS autor, e.nome AS editora FROM livros l INNER JOIN autores a INNER JOIN editoras e LEFT JOIN categorias_livros cl ON l.id = cl.livros_id LEFT JOIN categorias c ON c.id = cl.categorias_id WHERE l.autores_id = a.id AND l.editoras_id = e.id";
             if (!busca.equals("")) {
@@ -78,15 +77,15 @@ public class LivrosDAO {
                 lista.add(livro);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os livros.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os livros.");
+            throw new Exception("Erro ao listar os livros.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Livros> listarGerenciar(String busca) {
+    public List<Livros> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT l.id, l.titulo, a.nome AS autor, e.nome AS editora FROM livros l INNER JOIN autores a INNER JOIN editoras e WHERE l.autores_id = a.id AND l.editoras_id = e.id";
             if (!busca.equals("")) {
@@ -109,15 +108,15 @@ public class LivrosDAO {
                 lista.add(livro);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os livros.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os livros.");
+            throw new Exception("Erro ao listar os livros.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Livros> exbirLivrosAutor(int id) {
+    public List<Livros> exbirLivrosAutor(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT l.id, l.titulo, e.nome FROM livros l INNER JOIN editoras e INNER JOIN autores a WHERE l.editoras_id = e.id AND l.autores_id = a.id AND a.id = ?");
             preparedStatement.setInt(1, id);
@@ -130,15 +129,15 @@ public class LivrosDAO {
                 lista.add(livro);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os livros.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os livros.");
+            throw new Exception("Erro ao listar os livros.");
         } finally {
             desconectar();
         }
     }
 
-    public Livros exibirLivro(int id) {
+    public Livros exibirLivro(int id) throws Exception {
         Livros livro = new Livros();
         Autores autor = new Autores();
         Editoras editora = new Editoras();
@@ -171,15 +170,15 @@ public class LivrosDAO {
             } else {
                 return null;
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir livro.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir livro.");
+            throw new Exception("Erro ao exibir livro.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String titulo, int ano, int autor, int editora, String sinopse, File capa, List<Categorias> categorias) {
+    public void cadastrar(String titulo, int ano, int autor, int editora, String sinopse, File capa, List<Categorias> categorias) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO livros(titulo, ano, autores_id, editoras_id, descricao, capa) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, titulo);
@@ -202,15 +201,15 @@ public class LivrosDAO {
                 preparedStatement.setInt(2, c.getId());
                 preparedStatement.executeUpdate();
             }
-            JOptionPane.showMessageDialog(null, "Livro cadastrado.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar livro.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar livro.");
+            throw new Exception("Erro ao cadastrar livro.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, String titulo, int ano, int autor, int editora, String sinopse, File capa, List<Categorias> categorias) {
+    public void alterar(int id, String titulo, int ano, int autor, int editora, String sinopse, File capa, List<Categorias> categorias) throws Exception {
         try {
             if (capa != null) {
                 preparedStatement = connection.prepareStatement("UPDATE livros SET titulo = ?, ano = ?, autores_id = ?, editoras_id = ?, descricao = ?, capa = ? WHERE id = ?");
@@ -239,28 +238,28 @@ public class LivrosDAO {
                 preparedStatement.setInt(2, c.getId());
                 preparedStatement.executeUpdate();
             }
-            JOptionPane.showMessageDialog(null, "Livro alterado.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar livro.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar livro.");
+            throw new Exception("Erro ao alterar livro.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM livros WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Livro excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir livro.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir livro.");
+            throw new Exception("Erro ao excluir livro.");
         } finally {
             desconectar();
         }
     }
 
-    public List<String> listarGerenciarExemplares(int id) {
+    public List<String> listarGerenciarExemplares(int id) throws Exception {
         try {
             int idBanido;
             List<String> lista = new ArrayList();
@@ -283,9 +282,9 @@ public class LivrosDAO {
                 lista.add(nomeLivro);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar livros.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar livros.");
+            throw new Exception("Erro ao listar livros.");
         } finally {
             desconectar();
         }

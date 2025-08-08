@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Categorias;
 
 public class CategoriasDAO {
@@ -19,7 +18,7 @@ public class CategoriasDAO {
         this.connection = connection;
     }
 
-    public List<String> listarBuscarLivros() {
+    public List<String> listarBuscarLivros() throws Exception {
         List<String> lista = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT DISTINCT(nome) FROM categorias ORDER BY nome");
@@ -29,14 +28,14 @@ public class CategoriasDAO {
             }
             return lista;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar as categorias");
-            return null;
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public List<String> listarCadastroLivro() {
+    public List<String> listarCadastroLivro() throws Exception {
         try {
             List<String> lista = new ArrayList();
             preparedStatement = connection.prepareStatement("SELECT id, nome FROM categorias ORDER BY nome");
@@ -46,15 +45,15 @@ public class CategoriasDAO {
                 lista.add(nomeCategoria);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar as categorias");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Categorias> getCategoriasLivro(int id) {
+    public List<Categorias> getCategoriasLivro(int id) throws Exception {
         List<Categorias> lista = new ArrayList();
         try {
             preparedStatement = connection.prepareStatement("SELECT c.id, c.nome FROM categorias c INNER JOIN categorias_livros cl INNER JOIN livros l WHERE cl.categorias_id = c.id AND cl.livros_id = l.id AND l.id = ? ORDER BY c.nome");
@@ -68,14 +67,14 @@ public class CategoriasDAO {
             }
             return lista;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar categorias");
-            return null;
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public Categorias getCategoria(int id) {
+    public Categorias getCategoria(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT nome FROM categorias WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -86,14 +85,14 @@ public class CategoriasDAO {
             }
             return categoria;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir categoria.");
-            return null;
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Categorias> listarGerenciar(String busca) {
+    public List<Categorias> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT id, nome FROM categorias";
             if (!busca.equals("")) {
@@ -112,63 +111,63 @@ public class CategoriasDAO {
                 lista.add(categoria);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar as categorias.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM categorias WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Categoria excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir categoria.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as categorias.");
+            throw new Exception("Erro ao listar as categorias.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String nome) {
+    public void cadastrar(String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM categorias WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Categoria já existe.");
+                throw new Exception("Categoria já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("INSERT INTO categorias(nome) VALUES (?)");
                 preparedStatement.setString(1, nome);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Categoria cadastrada.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar categoria.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar categoria.");
+            throw new Exception("Erro ao cadastrar categoria.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, String nome) {
+    public void alterar(int id, String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM categorias WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Categoria já existe.");
+                throw new Exception("Categoria já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("UPDATE categorias SET nome = ? WHERE id = ?");
                 preparedStatement.setString(1, nome);
                 preparedStatement.setInt(2, id);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Categoria alterada.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar categoria.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar categoria.");
+            throw new Exception("Erro ao alterar categoria.");
         } finally {
             desconectar();
         }

@@ -107,8 +107,12 @@ public class PnExemplarGerenciar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtLivroActionPerformed
-        ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
-        TelaPrincipal.sobreporPainel(new TelaInfoLivro(exemplaresDao.getIdLivro(id)));
+        try {
+            ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
+            TelaPrincipal.sobreporPainel(new TelaInfoLivro(exemplaresDao.getIdLivro(id)));
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }//GEN-LAST:event_BtLivroActionPerformed
 
     private void BtEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEditarActionPerformed
@@ -121,12 +125,15 @@ public class PnExemplarGerenciar extends javax.swing.JPanel {
             if (input.equals("SIM")) {
                 ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
                 exemplaresDao.excluir(id);
+                JOptionPane.showMessageDialog(null, "Exemplar excluído.");
                 listener.sinalGlobal();
             } else {
                 JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

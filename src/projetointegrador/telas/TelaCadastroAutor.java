@@ -217,20 +217,26 @@ public class TelaCadastroAutor extends javax.swing.JPanel {
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
         if (!TxNome.getText().isEmpty() && CbMovimento.getSelectedIndex() != -1 && verificarData() && !TxBiografia.getText().isEmpty()) {
-            String item = (String) CbMovimento.getSelectedItem();
-            String dataFalecimento = null;
-            if (CbVivo.getSelectedIndex() == 0) {
-                dataFalecimento = TxFalecimento.getText();
+            try {
+                String item = (String) CbMovimento.getSelectedItem();
+                String dataFalecimento = null;
+                if (CbVivo.getSelectedIndex() == 0) {
+                    dataFalecimento = TxFalecimento.getText();
+                }
+                String[] itemdividido = item.split("/");
+                int idMovimento = Integer.parseInt(itemdividido[0]);
+                AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
+                if (id == -1) {
+                    autoresDao.cadastrar(TxNome.getText(), idMovimento, TxNascimento.getText(), dataFalecimento, TxBiografia.getText(), imagem);
+                    JOptionPane.showMessageDialog(null, "Autor cadastrado.");
+                } else {
+                    autoresDao.alterar(id, TxNome.getText(), idMovimento, TxNascimento.getText(), dataFalecimento, TxBiografia.getText(), imagem);
+                    JOptionPane.showMessageDialog(null, "Autor alterado.");
+                }
+                listener.sinalGlobal();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            String[] itemdividido = item.split("/");
-            int idMovimento = Integer.parseInt(itemdividido[0]);
-            AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
-            if (id == -1) {
-                autoresDao.cadastrar(TxNome.getText(), idMovimento, TxNascimento.getText(), dataFalecimento, TxBiografia.getText(), imagem);
-            } else {
-                autoresDao.alterar(id, TxNome.getText(), idMovimento, TxNascimento.getText(), dataFalecimento, TxBiografia.getText(), imagem);
-            }
-            listener.sinalGlobal();
         } else {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos. Apenas falecimento e imagem são opcionais.\nO formato da data é: DD/MM/AAAA");
         }
@@ -257,29 +263,33 @@ public class TelaCadastroAutor extends javax.swing.JPanel {
     }//GEN-LAST:event_CbVivoActionPerformed
 
     private void atualizar() {
-        CbMovimento.removeAllItems();
-        MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
-        List<String> listaMovimentos = movimentosDao.listarCadastroAutor(id);
-        for (String s : listaMovimentos) {
-            CbMovimento.addItem(s);
-        }
-        if (id != -1) {
-            CbMovimento.setSelectedIndex(0);
-            AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
-            Autores autor = autoresDao.exibirAutor(id);
-            TxNome.setText(autor.getNome());
-            TxNascimento.setText(autor.getDataNascimento());
-            if (autor.getDataFalecimento() != null) {
-                TxFalecimento.setText(autor.getDataFalecimento());
+        try {
+            CbMovimento.removeAllItems();
+            MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
+            List<String> listaMovimentos = movimentosDao.listarCadastroAutor(id);
+            for (String s : listaMovimentos) {
+                CbMovimento.addItem(s);
+            }
+            if (id != -1) {
+                CbMovimento.setSelectedIndex(0);
+                AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
+                Autores autor = autoresDao.exibirAutor(id);
+                TxNome.setText(autor.getNome());
+                TxNascimento.setText(autor.getDataNascimento());
+                if (autor.getDataFalecimento() != null) {
+                    TxFalecimento.setText(autor.getDataFalecimento());
+                } else {
+                    CbVivo.setSelectedIndex(1);
+                }
+                TxBiografia.setText(autor.getBiografia());
+                if (autor.getFoto() != null) {
+                    LbCaminho.setText("Sem alteração");
+                }
             } else {
-                CbVivo.setSelectedIndex(1);
+                CbMovimento.setSelectedIndex(-1);
             }
-            TxBiografia.setText(autor.getBiografia());
-            if (autor.getFoto() != null) {
-                LbCaminho.setText("Sem alteração");
-            }
-        } else {
-            CbMovimento.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

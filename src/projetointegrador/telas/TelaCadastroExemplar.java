@@ -103,35 +103,45 @@ public class TelaCadastroExemplar extends javax.swing.JPanel {
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
         if (!TxLocal.getText().isEmpty() && CbLivro.getSelectedIndex() != -1) {
-            String item = (String) CbLivro.getSelectedItem();
-            String[] itemDividido = item.split("/");
-            int idlivro = Integer.parseInt(itemDividido[0]);
-            ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
-            if (id == -1) {
-                exemplaresDao.cadastrar(idlivro, TxLocal.getText());
-            } else {
-                exemplaresDao.alterar(id, idlivro, TxLocal.getText());
+            try {
+                String item = (String) CbLivro.getSelectedItem();
+                String[] itemDividido = item.split("/");
+                int idlivro = Integer.parseInt(itemDividido[0]);
+                ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
+                if (id == -1) {
+                    exemplaresDao.cadastrar(idlivro, TxLocal.getText());
+                    JOptionPane.showMessageDialog(null, "Exemplar cadastrado.");
+                } else {
+                    exemplaresDao.alterar(id, idlivro, TxLocal.getText());
+                    JOptionPane.showMessageDialog(null, "Exemplar alterado.");
+                }
+                listener.sinalGlobal();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            listener.sinalGlobal();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um livro e defina a localização física deste exemplar.");
         }
     }//GEN-LAST:event_BtSalvarActionPerformed
 
     private void atualizar() {
-        CbLivro.removeAllItems();
-        LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-        List<String> lista = livrosDao.listarGerenciarExemplares(id);
-        for (String s : lista) {
-            CbLivro.addItem(s);
-        }
-        if (id != -1) {
-            CbLivro.setSelectedIndex(0);
-            ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
-            Exemplares exemplar = exemplaresDao.getExemplar(id);
-            TxLocal.setText(exemplar.getLocalizacao());
-        } else {
-            CbLivro.setSelectedIndex(-1);
+        try {
+            CbLivro.removeAllItems();
+            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+            List<String> lista = livrosDao.listarGerenciarExemplares(id);
+            for (String s : lista) {
+                CbLivro.addItem(s);
+            }
+            if (id != -1) {
+                CbLivro.setSelectedIndex(0);
+                ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
+                Exemplares exemplar = exemplaresDao.getExemplar(id);
+                TxLocal.setText(exemplar.getLocalizacao());
+            } else {
+                CbLivro.setSelectedIndex(-1);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

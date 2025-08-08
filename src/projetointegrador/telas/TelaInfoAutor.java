@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import projetointegrador.dao.AutoresDAO;
 import projetointegrador.dao.Conector;
@@ -138,38 +139,42 @@ public class TelaInfoAutor extends javax.swing.JPanel {
     }//GEN-LAST:event_BtFecharActionPerformed
 
     private void exibir(int id) {
-        AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
-        Autores autor = autoresDao.exibirAutor(id);
-        if (autor.getFoto() != null) {
-            LbFoto.setIcon(autor.getFoto());
-        }
-        LbNome.setText(autor.getNome());
-        LbId.setText("ID: " + id);
-        LbMovimento.setText(autor.getMovimento().getNome());
-        LbNasc.setText(autor.getDataNascimento());
-        if (autor.getDataFalecimento() != null) {
-            LbNasc.setText(LbNasc.getText() + " - " + autor.getDataFalecimento());
-        }
-        TxBiografia.setText(autor.getBiografia());
-
-        LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-        List<Livros> lista = livrosDao.exbirLivrosAutor(id);
-        if (lista != null) {
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(30));
-            for (int i = 0; i < lista.size(); i++) {
-                PnLivroInfoAutor painel = new PnLivroInfoAutor(lista.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                PnAux.add(painel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
-                }
+        try {
+            AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
+            Autores autor = autoresDao.exibirAutor(id);
+            if (autor.getFoto() != null) {
+                LbFoto.setIcon(autor.getFoto());
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+            LbNome.setText(autor.getNome());
+            LbId.setText("ID: " + id);
+            LbMovimento.setText(autor.getMovimento().getNome());
+            LbNasc.setText(autor.getDataNascimento());
+            if (autor.getDataFalecimento() != null) {
+                LbNasc.setText(LbNasc.getText() + " - " + autor.getDataFalecimento());
+            }
+            TxBiografia.setText(autor.getBiografia());
+            
+            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+            List<Livros> lista = livrosDao.exbirLivrosAutor(id);
+            if (lista != null) {
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(30));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnLivroInfoAutor painel = new PnLivroInfoAutor(lista.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    PnAux.add(painel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

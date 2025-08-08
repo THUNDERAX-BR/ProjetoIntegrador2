@@ -270,19 +270,25 @@ public class TelaCadastroLivro extends javax.swing.JPanel {
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
         if (!TxTitulo.getText().isEmpty() && !TxAno.getText().isEmpty() && !TxSinopse.getText().isEmpty() && CbAutor.getSelectedIndex() != -1 && CbEditora.getSelectedIndex() != -1) {
-            String item = (String) CbAutor.getSelectedItem();
-            String[] itemDividido = item.split("/");
-            int idAutor = Integer.parseInt(itemDividido[0]);
-            item = (String) CbEditora.getSelectedItem();
-            itemDividido = item.split("/");
-            int idEditora = Integer.parseInt(itemDividido[0]);
-            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-            if (id == -1) {
-                livrosDao.cadastrar(TxTitulo.getText(), Integer.parseInt(TxAno.getText()), idAutor, idEditora, TxSinopse.getText(), imagem, categoriasSelecionadas);
-            } else {
-                livrosDao.alterar(id, TxTitulo.getText(), Integer.parseInt(TxAno.getText()), idAutor, idEditora, TxSinopse.getText(), imagem, categoriasSelecionadas);
+            try {
+                String item = (String) CbAutor.getSelectedItem();
+                String[] itemDividido = item.split("/");
+                int idAutor = Integer.parseInt(itemDividido[0]);
+                item = (String) CbEditora.getSelectedItem();
+                itemDividido = item.split("/");
+                int idEditora = Integer.parseInt(itemDividido[0]);
+                LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+                if (id == -1) {
+                    livrosDao.cadastrar(TxTitulo.getText(), Integer.parseInt(TxAno.getText()), idAutor, idEditora, TxSinopse.getText(), imagem, categoriasSelecionadas);
+                    JOptionPane.showMessageDialog(null, "Livro cadastrado.");
+                } else {
+                    livrosDao.alterar(id, TxTitulo.getText(), Integer.parseInt(TxAno.getText()), idAutor, idEditora, TxSinopse.getText(), imagem, categoriasSelecionadas);
+                    JOptionPane.showMessageDialog(null, "Livro alterado.");
+                }
+                listener.sinalGlobal();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-            listener.sinalGlobal();
         } else {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos. Apenas capa é opcional.");
         }
@@ -315,40 +321,44 @@ public class TelaCadastroLivro extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void atualizar() {
-        CbAutor.removeAllItems();
-        AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
-        List<String> listaAutores = autoresDao.listarCadastroLivro(id);
-        for (String s : listaAutores) {
-            CbAutor.addItem(s);
-        }
-        CbEditora.removeAllItems();
-        EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
-        List<String> listaEditoras = editorasDao.listarCadastroLivro(id);
-        for (String s : listaEditoras) {
-            CbEditora.addItem(s);
-        }
-        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-        List<String> listaCategorias = categoriasDao.listarCadastroLivro();
-        for (String s : listaCategorias) {
-            CbCategoria.addItem(s);
-        }
-        CbCategoria.setSelectedIndex(-1);
-        if (id != -1) {
-            categoriasDao.reconectar(Conector.conectar());
-            categoriasSelecionadas = categoriasDao.getCategoriasLivro(id);
-            CbAutor.setSelectedIndex(0);
-            CbEditora.setSelectedIndex(0);
-            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-            Livros livro = livrosDao.exibirLivro(id);
-            TxTitulo.setText(livro.getTitulo());
-            TxAno.setText(String.valueOf(livro.getAno()));
-            TxSinopse.setText(livro.getDescricao());
-            if (livro.getCapa() != null) {
-                LbCaminho.setText("Sem alteração");
+        try {
+            CbAutor.removeAllItems();
+            AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
+            List<String> listaAutores = autoresDao.listarCadastroLivro(id);
+            for (String s : listaAutores) {
+                CbAutor.addItem(s);
             }
-        } else {
-            CbAutor.setSelectedIndex(-1);
-            CbEditora.setSelectedIndex(-1);
+            CbEditora.removeAllItems();
+            EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
+            List<String> listaEditoras = editorasDao.listarCadastroLivro(id);
+            for (String s : listaEditoras) {
+                CbEditora.addItem(s);
+            }
+            CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+            List<String> listaCategorias = categoriasDao.listarCadastroLivro();
+            for (String s : listaCategorias) {
+                CbCategoria.addItem(s);
+            }
+            CbCategoria.setSelectedIndex(-1);
+            if (id != -1) {
+                categoriasDao.reconectar(Conector.conectar());
+                categoriasSelecionadas = categoriasDao.getCategoriasLivro(id);
+                CbAutor.setSelectedIndex(0);
+                CbEditora.setSelectedIndex(0);
+                LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+                Livros livro = livrosDao.exibirLivro(id);
+                TxTitulo.setText(livro.getTitulo());
+                TxAno.setText(String.valueOf(livro.getAno()));
+                TxSinopse.setText(livro.getDescricao());
+                if (livro.getCapa() != null) {
+                    LbCaminho.setText("Sem alteração");
+                }
+            } else {
+                CbAutor.setSelectedIndex(-1);
+                CbEditora.setSelectedIndex(-1);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

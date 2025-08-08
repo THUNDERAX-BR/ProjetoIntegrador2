@@ -8,6 +8,7 @@ import projetointegrador.objects.Logins;
 import projetointegrador.dao.Conector;
 import projetointegrador.dao.LoginsDAO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -126,12 +127,16 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtEntrarActionPerformed
-        LoginsDAO loginDao = new LoginsDAO(Conector.conectar());
-        Logins login = loginDao.validarLogin(TxLogin.getText(), String.valueOf(TxSenha.getPassword()));
-        if (login != null) {
-            TelaPrincipal tela = new TelaPrincipal(login);
-            tela.setVisible(true);
-            dispose();
+        try {
+            LoginsDAO loginDao = new LoginsDAO(Conector.conectar());
+            Logins login = loginDao.validarLogin(TxLogin.getText(), String.valueOf(TxSenha.getPassword()));
+            if (login != null) {
+                TelaPrincipal tela = new TelaPrincipal(login);
+                tela.setVisible(true);
+                dispose();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_BtEntrarActionPerformed
 

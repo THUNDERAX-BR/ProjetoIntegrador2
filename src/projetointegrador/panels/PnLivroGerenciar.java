@@ -120,12 +120,15 @@ public class PnLivroGerenciar extends javax.swing.JPanel {
             if (input.equals("SIM")) {
                 LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
                 livrosDao.excluir(id);
+                JOptionPane.showMessageDialog(null, "Livro excluído.");
                 listener.sinalGlobal();
             } else {
                 JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

@@ -87,6 +87,7 @@ public class PnLoginGerenciar extends javax.swing.JPanel {
                 if (input.equals("SIM")) {
                     LoginsDAO loginDao = new LoginsDAO(Conector.conectar());
                     loginDao.excluir(id);
+                    JOptionPane.showMessageDialog(null, "Login excluído.");
                     listener.sinalGlobal();
                 } else {
                     JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
@@ -94,6 +95,8 @@ public class PnLoginGerenciar extends javax.swing.JPanel {
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

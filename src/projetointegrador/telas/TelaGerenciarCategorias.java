@@ -203,34 +203,38 @@ public class TelaGerenciarCategorias extends javax.swing.JPanel implements Globa
     }//GEN-LAST:event_BtFecharActionPerformed
 
     private void listar() {
-        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-        String busca = "";
-        if (!TxBusca.getForeground().equals(Color.darkGray)) {
-            busca = TxBusca.getText();
-        }
-
-        List<Categorias> lista = categoriasDao.listarGerenciar(busca);
-        if (lista != null) {
-            if (lista.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
+        try {
+            CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+            String busca = "";
+            if (!TxBusca.getForeground().equals(Color.darkGray)) {
+                busca = TxBusca.getText();
             }
-
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(40));
-            for (int i = 0; i < lista.size(); i++) {
-                PnCategoriaGerenciar painel = new PnCategoriaGerenciar(lista.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                painel.setListener(this);
-                PnAux.add(painel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
+            
+            List<Categorias> lista = categoriasDao.listarGerenciar(busca);
+            if (lista != null) {
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
                 }
+                
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(40));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnCategoriaGerenciar painel = new PnCategoriaGerenciar(lista.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    painel.setListener(this);
+                    PnAux.add(painel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

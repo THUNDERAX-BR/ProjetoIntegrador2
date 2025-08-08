@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Movimentos;
 
 public class MovimentosDAO {
@@ -19,7 +18,7 @@ public class MovimentosDAO {
         this.connection = connection;
     }
 
-    public List<String> listarFiltroBuscarAutores() {
+    public List<String> listarFiltroBuscarAutores() throws Exception {
         List<String> lista = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT DISTINCT(nome) FROM movimentos ORDER BY nome");
@@ -29,14 +28,14 @@ public class MovimentosDAO {
             }
             return lista;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar movimentos");
-            return null;
+            System.out.println("Erro ao listar movimentos.");
+            throw new Exception("Erro ao listar movimentos.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Movimentos> listarGerenciar(String busca) {
+    public List<Movimentos> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT id, nome FROM movimentos";
             if (!busca.equals("")) {
@@ -55,15 +54,15 @@ public class MovimentosDAO {
                 lista.add(movimento);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os movimentos.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar movimentos.");
+            throw new Exception("Erro ao listar movimentos.");
         } finally {
             desconectar();
         }
     }
 
-    public Movimentos getMovimento(int id) {
+    public Movimentos getMovimento(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT nome FROM movimentos WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -73,69 +72,69 @@ public class MovimentosDAO {
                 movimento.setNome(resultSet.getString("nome"));
             }
             return movimento;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir o movimento.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir o movimento.");
+            throw new Exception("Erro ao exibir o movimento.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String nome) {
+    public void cadastrar(String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM movimentos WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Movimento já existe.");
+                throw new Exception("Movimento já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("INSERT INTO movimentos(nome) VALUES (?)");
                 preparedStatement.setString(1, nome);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Movimento cadastrado.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar movimento.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar movimento.");
+            throw new Exception("Erro ao cadastrar movimento.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, String nome) {
+    public void alterar(int id, String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM movimentos WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Movimento já existe.");
+                throw new Exception("Movimento já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("UPDATE movimentos SET nome = ? WHERE id = ?");
                 preparedStatement.setString(1, nome);
                 preparedStatement.setInt(2, id);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Movimento alterado.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar movimento.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar movimento.");
+            throw new Exception("Erro ao alterar movimento.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM movimentos WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Movimento excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir movimento.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir movimento.");
+            throw new Exception("Erro ao excluir movimento.");
         } finally {
             desconectar();
         }
     }
 
-    public List<String> listarCadastroAutor(int id) {
+    public List<String> listarCadastroAutor(int id) throws Exception {
         try {
             int idBanido;
             List<String> lista = new ArrayList();
@@ -158,9 +157,9 @@ public class MovimentosDAO {
                 lista.add(nomeMovimento);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os movimentos.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os movimentos.");
+            throw new Exception("Erro ao listar os movimentos.");
         } finally {
             desconectar();
         }

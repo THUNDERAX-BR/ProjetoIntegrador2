@@ -202,34 +202,38 @@ public class TelaGerenciarLogins extends javax.swing.JPanel implements GlobalLis
     }//GEN-LAST:event_BtFecharActionPerformed
 
     private void listar() {
-        LoginsDAO loginDao = new LoginsDAO(Conector.conectar());
-        String busca = "";
-        if (!TxBusca.getForeground().equals(Color.darkGray)) {
-            busca = TxBusca.getText();
-        }
-
-        List<Logins> lista = loginDao.listarGerenciar(busca);
-        if (lista != null) {
-            if (lista.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
+        try {
+            LoginsDAO loginDao = new LoginsDAO(Conector.conectar());
+            String busca = "";
+            if (!TxBusca.getForeground().equals(Color.darkGray)) {
+                busca = TxBusca.getText();
             }
-
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(40));
-            for (int i = 0; i < lista.size(); i++) {
-                PnLoginGerenciar panel = new PnLoginGerenciar(lista.get(i));
-                panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                panel.setListener(this);
-                PnAux.add(panel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
+            
+            List<Logins> lista = loginDao.listarGerenciar(busca);
+            if (lista != null) {
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
                 }
+                
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(40));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnLoginGerenciar panel = new PnLoginGerenciar(lista.get(i));
+                    panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    panel.setListener(this);
+                    PnAux.add(panel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 

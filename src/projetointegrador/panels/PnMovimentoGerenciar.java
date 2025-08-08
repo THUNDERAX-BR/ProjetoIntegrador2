@@ -89,12 +89,15 @@ public class PnMovimentoGerenciar extends javax.swing.JPanel {
             if (input.equals("SIM")) {
                 MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
                 movimentosDao.excluir(id);
+                JOptionPane.showMessageDialog(null, "Movimento excluído.");
                 listener.sinalGlobal();
             } else {
                 JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

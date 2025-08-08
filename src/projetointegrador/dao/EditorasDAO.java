@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Editoras;
 
 public class EditorasDAO {
@@ -19,7 +18,7 @@ public class EditorasDAO {
         this.connection = connection;
     }
 
-    public List<Editoras> listarGerenciar(String busca) {
+    public List<Editoras> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT id, nome FROM editoras";
             if (!busca.equals("")) {
@@ -38,28 +37,28 @@ public class EditorasDAO {
                 lista.add(editora);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar as editoras.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as editoras.");
+            throw new Exception("Erro ao listar as editoras.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM editoras WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Editora excluída.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir editora.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir editora.");
+            throw new Exception("Erro ao excluir editora.");
         } finally {
             desconectar();
         }
     }
 
-    public Editoras getEditora(int id) {
+    public Editoras getEditora(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT nome FROM editoras WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -70,55 +69,55 @@ public class EditorasDAO {
             }
             return editora;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir editora.");
-            return null;
+            System.out.println("Erro ao exibir editora.");
+            throw new Exception("Erro ao exibir editora.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String nome) {
+    public void cadastrar(String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM editoras WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Editora já existe.");
+                throw new Exception("Editora já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("INSERT INTO editoras(nome) VALUES (?)");
                 preparedStatement.setString(1, nome);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Editora cadastrada.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar editora.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar editora.");
+            throw new Exception("Erro ao cadastrar editora.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, String nome) {
+    public void alterar(int id, String nome) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT id FROM editoras WHERE nome = ?");
             preparedStatement.setString(1, nome);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(null, "Editora já existe.");
+                throw new Exception("Editora já existe.");
             } else {
                 preparedStatement = connection.prepareStatement("UPDATE editoras SET nome = ? WHERE id = ?");
                 preparedStatement.setString(1, nome);
                 preparedStatement.setInt(2, id);
                 preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Editora alterada.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar editora.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar editora.");
+            throw new Exception("Erro ao alterar editora.");
         } finally {
             desconectar();
         }
     }
 
-    public List<String> listarCadastroLivro(int id) {
+    public List<String> listarCadastroLivro(int id) throws Exception {
         try {
             int idBanido;
             List<String> lista = new ArrayList();
@@ -141,9 +140,9 @@ public class EditorasDAO {
                 lista.add(nomeEditora);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar as editoras.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar as editoras.");
+            throw new Exception("Erro ao listar as editoras.");
         } finally {
             desconectar();
         }

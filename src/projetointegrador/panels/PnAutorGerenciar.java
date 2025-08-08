@@ -114,12 +114,15 @@ public class PnAutorGerenciar extends javax.swing.JPanel {
             if (input.equals("SIM")) {
                 AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
                 autoresDao.excluir(id);
+                JOptionPane.showMessageDialog(null, "Autor excluído.");
                 listener.sinalGlobal();
             } else {
                 JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

@@ -256,50 +256,58 @@ public class TelaBuscarAutores extends javax.swing.JPanel {
     }//GEN-LAST:event_BtFiltroActionPerformed
 
     private void listar() {
-        AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
-        String busca = "";
-        String movimento = "";
-
-        if (CbMov.getSelectedIndex() != -1) {
-            movimento = CbMov.getSelectedItem().toString();
-        }
-        if (!TxBusca.getForeground().equals(Color.darkGray)) {
-            busca = TxBusca.getText();
-        }
-
-        List<Autores> lista = autoresDao.listarBuscarAutores(busca, movimento);
-
-        if (lista != null) {
-            if (lista.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
+        try {
+            AutoresDAO autoresDao = new AutoresDAO(Conector.conectar());
+            String busca = "";
+            String movimento = "";
+            
+            if (CbMov.getSelectedIndex() != -1) {
+                movimento = CbMov.getSelectedItem().toString();
             }
-
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(40));
-            for (int i = 0; i < lista.size(); i++) {
-                PnAutorBuscarAutores painel = new PnAutorBuscarAutores(lista.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                PnAux.add(painel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
+            if (!TxBusca.getForeground().equals(Color.darkGray)) {
+                busca = TxBusca.getText();
+            }
+            
+            List<Autores> lista = autoresDao.listarBuscarAutores(busca, movimento);
+            
+            if (lista != null) {
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
                 }
+                
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(40));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnAutorBuscarAutores painel = new PnAutorBuscarAutores(lista.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    PnAux.add(painel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
     private void atualizarCombo() {
-        CbMov.removeAllItems();
-        MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
-        List<String> lista = movimentosDao.listarFiltroBuscarAutores();
-        for (String s : lista) {
-            CbMov.addItem(s);
+        try {
+            CbMov.removeAllItems();
+            MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
+            List<String> lista = movimentosDao.listarFiltroBuscarAutores();
+            for (String s : lista) {
+                CbMov.addItem(s);
+            }
+            CbMov.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        CbMov.setSelectedIndex(-1);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

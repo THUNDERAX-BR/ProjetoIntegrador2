@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import projetointegrador.dao.CategoriasDAO;
 import projetointegrador.dao.Conector;
@@ -170,45 +171,49 @@ public class TelaInfoLivro extends javax.swing.JPanel {
     }//GEN-LAST:event_BtAutorActionPerformed
 
     private void exibir(int id) {
-        LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-        Livros livro = livrosDao.exibirLivro(id);
-        this.livro = livro;
-        if (livro.getCapa() != null) {
-            LbCapa.setIcon(livro.getCapa());
-        }
-        TxSinopse.setText(livro.getDescricao());
-        LbId.setText("ID: " + String.valueOf(livro.getId()));
-        LbEditora.setText(livro.getEditora().getNome());
-        LbAutor.setText(livro.getAutor().getNome());
-        LbAno.setText(String.valueOf(livro.getAno()));
-        LbTitulo.setText(livro.getTitulo());
-
-        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-        List<Categorias> listaCategorias = categoriasDao.getCategoriasLivro(id);
-        for (Categorias cat : listaCategorias) {
-            PnCategorias categoria = new PnCategorias(cat);
-            PnCategorias.add(categoria);
-        }
-
-        ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
-        List<Exemplares> listaExemplares = exemplaresDao.listarExemplaresLivro(id);
-
-        if (listaExemplares != null) {
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(30));
-            for (int i = 0; i < listaExemplares.size(); i++) {
-                PnExemplarInfoLivro painel = new PnExemplarInfoLivro(listaExemplares.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                PnAux.add(painel);
-                if (i < listaExemplares.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
-                }
+        try {
+            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+            Livros livro = livrosDao.exibirLivro(id);
+            this.livro = livro;
+            if (livro.getCapa() != null) {
+                LbCapa.setIcon(livro.getCapa());
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+            TxSinopse.setText(livro.getDescricao());
+            LbId.setText("ID: " + String.valueOf(livro.getId()));
+            LbEditora.setText(livro.getEditora().getNome());
+            LbAutor.setText(livro.getAutor().getNome());
+            LbAno.setText(String.valueOf(livro.getAno()));
+            LbTitulo.setText(livro.getTitulo());
+            
+            CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+            List<Categorias> listaCategorias = categoriasDao.getCategoriasLivro(id);
+            for (Categorias cat : listaCategorias) {
+                PnCategorias categoria = new PnCategorias(cat);
+                PnCategorias.add(categoria);
+            }
+            
+            ExemplaresDAO exemplaresDao = new ExemplaresDAO(Conector.conectar());
+            List<Exemplares> listaExemplares = exemplaresDao.listarExemplaresLivro(id);
+            
+            if (listaExemplares != null) {
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(30));
+                for (int i = 0; i < listaExemplares.size(); i++) {
+                    PnExemplarInfoLivro painel = new PnExemplarInfoLivro(listaExemplares.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    PnAux.add(painel);
+                    if (i < listaExemplares.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

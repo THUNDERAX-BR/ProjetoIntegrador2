@@ -285,51 +285,59 @@ public class TelaBuscarLivros extends javax.swing.JPanel {
     }//GEN-LAST:event_BtConfirmActionPerformed
 
     private void listar() {
-        LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
-        String busca = "";
-        String anoInicial = TxAnoIn.getText();
-        String anoFinal = TxAnoFin.getText();
-        String categoria = "";
-        if (CbCat.getSelectedIndex() != -1) {
-            categoria = CbCat.getSelectedItem().toString();
-        }
-        if (!TxBusca.getForeground().equals(Color.darkGray)) {
-            busca = TxBusca.getText();
-        }
-
-        List<Livros> lista = livrosDao.listarBuscarLivros(busca, anoInicial, anoFinal, categoria);
-
-        if (lista != null) {
-            if (lista.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
+        try {
+            LivrosDAO livrosDao = new LivrosDAO(Conector.conectar());
+            String busca = "";
+            String anoInicial = TxAnoIn.getText();
+            String anoFinal = TxAnoFin.getText();
+            String categoria = "";
+            if (CbCat.getSelectedIndex() != -1) {
+                categoria = CbCat.getSelectedItem().toString();
             }
-
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(40));
-            for (int i = 0; i < lista.size(); i++) {
-                PnLivroBuscarLivros painel = new PnLivroBuscarLivros(lista.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                PnAux.add(painel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
+            if (!TxBusca.getForeground().equals(Color.darkGray)) {
+                busca = TxBusca.getText();
+            }
+            
+            List<Livros> lista = livrosDao.listarBuscarLivros(busca, anoInicial, anoFinal, categoria);
+            
+            if (lista != null) {
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
                 }
+                
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(40));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnLivroBuscarLivros painel = new PnLivroBuscarLivros(lista.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    PnAux.add(painel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
     private void atualizarCombo() {
-        CbCat.removeAllItems();
-        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-        List<String> lista = categoriasDao.listarBuscarLivros();
-        for (String s : lista) {
-            CbCat.addItem(s);
+        try {
+            CbCat.removeAllItems();
+            CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+            List<String> lista = categoriasDao.listarBuscarLivros();
+            for (String s : lista) {
+                CbCat.addItem(s);
+            }
+            CbCat.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        CbCat.setSelectedIndex(-1);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

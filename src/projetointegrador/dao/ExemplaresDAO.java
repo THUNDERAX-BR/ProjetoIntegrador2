@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Editoras;
 import projetointegrador.objects.Exemplares;
 import projetointegrador.objects.Livros;
@@ -21,7 +20,7 @@ public class ExemplaresDAO {
         this.connection = connection;
     }
 
-    public List<Exemplares> listarExemplaresLivro(int id) {
+    public List<Exemplares> listarExemplaresLivro(int id) throws Exception {
         List<Exemplares> lista = new ArrayList();
         try {
             preparedStatement = connection.prepareStatement("SELECT id, localizacao FROM exemplares WHERE livros_id = ?");
@@ -33,14 +32,14 @@ public class ExemplaresDAO {
             }
             return lista;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar exemplares");
-            return null;
+            System.out.println("Erro ao listar os exemplares.");
+            throw new Exception("Erro ao listar os exemplares.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Exemplares> listarGerenciar(String busca) {
+    public List<Exemplares> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT e.id, l.titulo, ed.nome AS editora, e.localizacao FROM exemplares e INNER JOIN livros l INNER JOIN editoras ed WHERE e.livros_id = l.id AND l.editoras_id = ed.id";
             if (!busca.equals("")) {
@@ -64,15 +63,15 @@ public class ExemplaresDAO {
                 lista.add(exemplar);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os exemplares.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os exemplares.");
+            throw new Exception("Erro ao listar os exemplares.");
         } finally {
             desconectar();
         }
     }
 
-    public Exemplares getExemplar(int id) {
+    public Exemplares getExemplar(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT localizacao FROM exemplares WHERE id = ?");
             preparedStatement.setInt(1, id);
@@ -82,66 +81,66 @@ public class ExemplaresDAO {
                 exemplar.setLocalizacao(resultSet.getString("localizacao"));
             }
             return exemplar;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir o exemplar.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir o exemplar.");
+            throw new Exception("Erro ao exibir o exemplar.");
         } finally {
             desconectar();
         }
     }
 
-    public int getIdLivro(int id) {
+    public int getIdLivro(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("SELECT livros_id FROM exemplares WHERE id = ?");
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt("livros_id");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao verificar o livro do exemplar.");
-            return -1;
+        } catch (SQLException e) {
+            System.out.println("Erro ao verificar o livro do exemplar.");
+            throw new Exception("Erro ao verificar o livro do exemplar.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(int idLivro, String local) {
+    public void cadastrar(int idLivro, String local) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO exemplares(livros_id, localizacao) VALUES (?,?)");
             preparedStatement.setInt(1, idLivro);
             preparedStatement.setString(2, local);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Exemplar cadastrado.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar o exemplar.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar o exemplar.");
+            throw new Exception("Erro ao cadastrar o exemplar.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, int idLivro, String local) {
+    public void alterar(int id, int idLivro, String local) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("UPDATE exemplares SET livros_id = ?, localizacao = ? WHERE id = ?");
             preparedStatement.setInt(1, idLivro);
             preparedStatement.setString(2, local);
             preparedStatement.setInt(3, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Exemplar alterado.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar o exemplar.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar o exemplar.");
+            throw new Exception("Erro ao alterar o exemplar.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM exemplares WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Exemplar excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir exemplar.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir exemplar.");
+            throw new Exception("Erro ao excluir exemplar.");
         } finally {
             desconectar();
         }

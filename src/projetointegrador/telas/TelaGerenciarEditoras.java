@@ -7,6 +7,8 @@ package projetointegrador.telas;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -202,34 +204,38 @@ public class TelaGerenciarEditoras extends javax.swing.JPanel implements GlobalL
     }//GEN-LAST:event_BtFecharActionPerformed
 
     private void listar() {
-        EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
-        String busca = "";
-        if (!TxBusca.getForeground().equals(Color.darkGray)) {
-            busca = TxBusca.getText();
-        }
-
-        List<Editoras> lista = editorasDao.listarGerenciar(busca);
-        if (lista != null) {
-            if (lista.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
+        try {
+            EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
+            String busca = "";
+            if (!TxBusca.getForeground().equals(Color.darkGray)) {
+                busca = TxBusca.getText();
             }
-
-            PnAux.removeAll();
-            PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
-
-            PnAux.add(Box.createVerticalStrut(40));
-            for (int i = 0; i < lista.size(); i++) {
-                PnEditoraGerenciar painel = new PnEditoraGerenciar(lista.get(i));
-                painel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                painel.setListener(this);
-                PnAux.add(painel);
-                if (i < lista.size() - 1) {
-                    PnAux.add(Box.createVerticalStrut(40));
+            
+            List<Editoras> lista = editorasDao.listarGerenciar(busca);
+            if (lista != null) {
+                if (lista.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Nenhum registro encontrado.");
                 }
+                
+                PnAux.removeAll();
+                PnAux.setLayout(new BoxLayout(PnAux, BoxLayout.Y_AXIS));
+                
+                PnAux.add(Box.createVerticalStrut(40));
+                for (int i = 0; i < lista.size(); i++) {
+                    PnEditoraGerenciar painel = new PnEditoraGerenciar(lista.get(i));
+                    painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    painel.setListener(this);
+                    PnAux.add(painel);
+                    if (i < lista.size() - 1) {
+                        PnAux.add(Box.createVerticalStrut(40));
+                    }
+                }
+                
+                PnAux.revalidate();
+                PnAux.repaint();
             }
-
-            PnAux.revalidate();
-            PnAux.repaint();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

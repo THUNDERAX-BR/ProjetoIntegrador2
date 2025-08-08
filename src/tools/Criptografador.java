@@ -3,11 +3,10 @@ package tools;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import javax.swing.JOptionPane;
 
 public class Criptografador {
 
-    public static String md5(String senha) {
+    public static String md5(String senha) throws Exception {
         try {
             MessageDigest messageDIgest = MessageDigest.getInstance("MD5");
             byte[] messageDigest = messageDIgest.digest(senha.getBytes());
@@ -18,8 +17,8 @@ public class Criptografador {
             }
             return hashtext;
         } catch (NoSuchAlgorithmException e) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro ao criptografar.");
-            return null;
+            System.out.println("Erro ao criptografar a senha.");
+            throw new Exception("Erro ao criptografar a senha.");
         }
     }
 }

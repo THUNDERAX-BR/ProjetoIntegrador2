@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.LoginFactory;
 import projetointegrador.objects.Logins;
 import tools.Criptografador;
@@ -21,7 +20,7 @@ public class LoginsDAO {
         this.connection = connection;
     }
 
-    public Logins validarLogin(String login, String senha) {
+    public Logins validarLogin(String login, String senha) throws Exception {
         try {
             if (!login.isEmpty() && !senha.isEmpty()) {
                 String senhaCriptografada = Criptografador.md5(senha);
@@ -35,22 +34,20 @@ public class LoginsDAO {
                     loginRetorno.setLogin(resultSet.getString("login"));
                     return loginRetorno;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Login inválido ou senha incorreta.");
-                    return null;
+                    throw new Exception("Login inválido ou senha incorreta.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Os campos Login e Senha devem ser prenchidos.");
-                return null;
+                throw new Exception("Os campos Login e Senha devem ser prenchidos.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao realizar login.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao validar login");
+            throw new Exception("Erro ao validar login");
         } finally {
             desconectar();
         }
     }
 
-    public List<Logins> listarGerenciar(String busca) {
+    public List<Logins> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT id, login, acesso FROM logins";
             if (!busca.equals("")) {
@@ -72,28 +69,28 @@ public class LoginsDAO {
                 lista.add(loginGerenciar);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os logins.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os logins.");
+            throw new Exception("Erro ao listar os logins.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM logins WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Login excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir login.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir login.");
+            throw new Exception("Erro ao excluir login.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String login, String senha, String acesso) {
+    public void cadastrar(String login, String senha, String acesso) throws Exception {
         try {
             if (!login.isEmpty() && !senha.isEmpty() && acesso != null) {
                 if (senha.length() >= 8) {
@@ -101,7 +98,7 @@ public class LoginsDAO {
                     preparedStatement.setString(1, login);
                     resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()) {
-                        JOptionPane.showMessageDialog(null, "Login já existe.");
+                        throw new Exception("Login já existe");
                     } else {
                         String senhaCriptografada = Criptografador.md5(senha);
                         preparedStatement = connection.prepareStatement("INSERT INTO logins(login, senha, acesso) VALUES (?, ?, ?)");
@@ -109,16 +106,16 @@ public class LoginsDAO {
                         preparedStatement.setString(2, senhaCriptografada);
                         preparedStatement.setString(3, acesso);
                         preparedStatement.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Login cadastrado.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "A senha deve ter 8 ou mais caracteres.");
+                    throw new Exception("A senha deve ter 8 ou mais caracteres.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Preencha todos os campos e selecione o tipo de acesso.");
+                throw new Exception("Preencha todos os campos e selecione o tipo de acesso.");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar login.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar login.");
+            throw new Exception("Erro ao cadastrar login.");
         } finally {
             desconectar();
         }

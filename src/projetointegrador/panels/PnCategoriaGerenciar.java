@@ -90,12 +90,15 @@ public class PnCategoriaGerenciar extends javax.swing.JPanel {
             if (input.equals("SIM")) {
                 CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
                 categoriasDao.excluir(id);
+                JOptionPane.showMessageDialog(null, "Categoria excluído.");
                 listener.sinalGlobal();
             } else {
                 JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
             }
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_BtExcluirActionPerformed
 

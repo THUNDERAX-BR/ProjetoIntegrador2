@@ -92,29 +92,50 @@ public class TelaCadastroSimples extends javax.swing.JPanel {
         if (!TxNome.getText().isEmpty()) {
             switch (tipo) {
                 case 'c' -> {
-                    CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-                    if (id == -1) {
-                        categoriasDao.cadastrar(TxNome.getText());
-                    } else {
-                        categoriasDao.alterar(id, TxNome.getText());
+                    try {
+                        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+                        if (id == -1) {
+                            categoriasDao.cadastrar(TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Categoria cadastrada.");
+                        } else {
+                            categoriasDao.alterar(id, TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Categoria alterada.");
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage());
                     }
                 }
+
                 case 'm' -> {
-                    MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
-                    if (id == -1) {
-                        movimentosDao.cadastrar(TxNome.getText());
-                    } else {
-                        movimentosDao.alterar(id, TxNome.getText());
+                    try {
+                        MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
+                        if (id == -1) {
+                            movimentosDao.cadastrar(TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Movimento cadastrado.");
+                        } else {
+                            movimentosDao.alterar(id, TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Movimento alterado.");
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage());
                     }
                 }
+
                 case 'e' -> {
-                    EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
-                    if (id == -1) {
-                        editorasDao.cadastrar(TxNome.getText());
-                    } else {
-                        editorasDao.alterar(id, TxNome.getText());
+                    try {
+                        EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
+                        if (id == -1) {
+                            editorasDao.cadastrar(TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Editora cadastrada.");
+                        } else {
+                            editorasDao.alterar(id, TxNome.getText());
+                            JOptionPane.showMessageDialog(this, "Editora alterada.");
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, ex.getMessage());
                     }
                 }
+
             }
             listener.sinalGlobal();
         } else {
@@ -127,24 +148,28 @@ public class TelaCadastroSimples extends javax.swing.JPanel {
     }//GEN-LAST:event_BtFecharActionPerformed
 
     private void atualizar() {
-        if (id != -1) {
-            switch (tipo) {
-                case 'c' -> {
-                    CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
-                    Categorias c = categoriasDao.getCategoria(id);
-                    TxNome.setText(c.getNome());
-                }
-                case 'm' -> {
-                    MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
-                    Movimentos m = movimentosDao.getMovimento(id);
-                    TxNome.setText(m.getNome());
-                }
-                case 'e' -> {
-                    EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
-                    Editoras e = editorasDao.getEditora(id);
-                    TxNome.setText(e.getNome());
+        try{
+            if (id != -1) {
+                switch (tipo) {
+                    case 'c' -> {
+                        CategoriasDAO categoriasDao = new CategoriasDAO(Conector.conectar());
+                        Categorias c = categoriasDao.getCategoria(id);
+                        TxNome.setText(c.getNome());
+                    }
+                    case 'm' -> {
+                        MovimentosDAO movimentosDao = new MovimentosDAO(Conector.conectar());
+                        Movimentos m = movimentosDao.getMovimento(id);
+                        TxNome.setText(m.getNome());
+                    }
+                    case 'e' -> {
+                        EditorasDAO editorasDao = new EditorasDAO(Conector.conectar());
+                        Editoras e = editorasDao.getEditora(id);
+                        TxNome.setText(e.getNome());
+                    }
                 }
             }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 

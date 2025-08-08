@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import projetointegrador.objects.Autores;
 import projetointegrador.objects.Movimentos;
 
@@ -31,7 +30,7 @@ public class AutoresDAO {
         this.connection = connection;
     }
 
-    public List<Autores> listarBuscarAutores(String busca, String movimento) {
+    public List<Autores> listarBuscarAutores(String busca, String movimento) throws Exception {
         try {
             String statement = "SELECT a.id, a.nome, m.nome AS movimento FROM autores a INNER JOIN movimentos m WHERE m.id = a.movimentos_id";
             if (!busca.equals("")) {
@@ -62,15 +61,15 @@ public class AutoresDAO {
                 lista.add(autor);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os autores.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os autores.");
+            throw new Exception("Erro ao listar os autores.");
         } finally {
             desconectar();
         }
     }
 
-    public List<Autores> listarGerenciar(String busca) {
+    public List<Autores> listarGerenciar(String busca) throws Exception {
         try {
             String statement = "SELECT a.id, a.nome, m.nome AS movimento FROM autores a INNER JOIN movimentos m WHERE m.id = a.movimentos_id";
             if (!busca.equals("")) {
@@ -91,15 +90,15 @@ public class AutoresDAO {
                 lista.add(autor);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os autoress.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os autores.");
+            throw new Exception("Erro ao listar os autores.");
         } finally {
             desconectar();
         }
     }
 
-    public Autores exibirAutor(int id) {
+    public Autores exibirAutor(int id) throws Exception {
         Autores autor = new Autores();
         Movimentos movimento = new Movimentos();
         InputStream input;
@@ -142,28 +141,28 @@ public class AutoresDAO {
             } else {
                 return null;
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao exibir autor.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao exibir o autor.");
+            throw new Exception("Erro ao exibir o autor.");
         } finally {
             desconectar();
         }
     }
 
-    public void excluir(int id) {
+    public void excluir(int id) throws Exception {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM autores WHERE id = ?");
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Autor excluído.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir autor.");
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir autor.");
+            throw new Exception("Erro ao excluir autor.");
         } finally {
             desconectar();
         }
     }
 
-    public void cadastrar(String nome, int idmovimento, String nascimento, String falecimento, String biografia, File imagem) {
+    public void cadastrar(String nome, int idmovimento, String nascimento, String falecimento, String biografia, File imagem) throws Exception {
         try {
             SimpleDateFormat entrada = new SimpleDateFormat("dd/MM/yyyy");
             entrada.setLenient(false);
@@ -186,15 +185,15 @@ public class AutoresDAO {
             }
             preparedStatement.setBinaryStream(6, input);
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Autor cadastrado.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar autor.\n" + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Erro ao cadastrar autor.");
+            throw new Exception("Erro ao cadastrar autor.");
         } finally {
             desconectar();
         }
     }
 
-    public void alterar(int id, String nome, int idMovimento, String nascimento, String falecimento, String biografia, File imagem) {
+    public void alterar(int id, String nome, int idMovimento, String nascimento, String falecimento, String biografia, File imagem) throws Exception {
         try {
             SimpleDateFormat entrada = new SimpleDateFormat("dd/MM/yyyy");
             entrada.setLenient(false);
@@ -223,15 +222,15 @@ public class AutoresDAO {
                 preparedStatement.setInt(6, id);
             }
             preparedStatement.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Autor alterado.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao alterar autor.\n" + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Erro ao alterar autor.");
+            throw new Exception("Erro ao alterar autor.");
         } finally {
             desconectar();
         }
     }
 
-    public List<String> listarCadastroLivro(int id) {
+    public List<String> listarCadastroLivro(int id) throws Exception {
         try {
             int idBanido;
             List<String> lista = new ArrayList();
@@ -254,9 +253,9 @@ public class AutoresDAO {
                 lista.add(nomeAutor);
             }
             return lista;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar os autores.");
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os autores.");
+            throw new Exception("Erro ao listar os autores.");
         } finally {
             desconectar();
         }

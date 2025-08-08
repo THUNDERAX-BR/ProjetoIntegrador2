@@ -5,6 +5,7 @@
 package projetointegrador.telas;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import projetointegrador.dao.Conector;
 import projetointegrador.dao.LoginsDAO;
 import projetointegrador.objects.LoginFactory;
@@ -109,11 +110,16 @@ public class TelaCadastroLogin extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtSalvarActionPerformed
-        LoginFactory fabrica = new LoginFactory();
-        String acesso = fabrica.passarParaBancoDeDados((String) CbAcesso.getSelectedItem());
-        LoginsDAO loginsDao = new LoginsDAO(Conector.conectar());
-        loginsDao.cadastrar(TxLogin.getText(), TxSenha.getText(), acesso);
-        listener.sinalGlobal();
+        try {
+            LoginFactory fabrica = new LoginFactory();
+            String acesso = fabrica.passarParaBancoDeDados((String) CbAcesso.getSelectedItem());
+            LoginsDAO loginsDao = new LoginsDAO(Conector.conectar());
+            loginsDao.cadastrar(TxLogin.getText(), TxSenha.getText(), acesso);
+            JOptionPane.showMessageDialog(null, "Login cadastrado.");
+            listener.sinalGlobal();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }//GEN-LAST:event_BtSalvarActionPerformed
 
     private void BtFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtFecharActionPerformed
